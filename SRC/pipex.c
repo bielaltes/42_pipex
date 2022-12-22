@@ -6,7 +6,7 @@
 /*   By: baltes-g <baltes-g@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 16:54:52 by baltes-g          #+#    #+#             */
-/*   Updated: 2022/12/21 15:12:06 by baltes-g         ###   ########.fr       */
+/*   Updated: 2022/12/22 20:39:49 by baltes-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,18 +18,21 @@ void error(char *str)
 	exit(2);
 }
 
+void cmd_not_found(char *str)
+{
+	write(2, str, ft_strlen(str));
+	write(2, ": command not found\n", 21);
+	exit(EXIT_FAILURE);
+}
+
 char *get_path(char **envp, char *exe)
 {
 	char **paths;
-	//write(2, "h", 1);
+	
 	while (envp && ft_strncmp(*envp, "PATH=", 4))
 		++envp;
-	if (!envp)
-	{
-		error("no environment");
-	}
 	paths = ft_split(*envp + 5, ':');
-	while (paths++)
+	while (paths && *paths)
 	{
 		char *tmp = ft_strjoin(*paths, "/");
 		char *path = ft_strjoin(tmp, exe);
@@ -37,7 +40,10 @@ char *get_path(char **envp, char *exe)
 		if (access(path, 0) == 0)
 			return path;
 		free(path);
+		paths++;
 	}
+	char *error_msg = ft_strjoin("pipex: ", exe);
+	cmd_not_found(error_msg);
 	return (NULL);
 }
 
