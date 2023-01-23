@@ -6,7 +6,7 @@
 #    By: baltes-g <baltes-g@student.42barcelona.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/16 17:10:25 by baltes-g          #+#    #+#              #
-#    Updated: 2022/12/14 16:15:24 by baltes-g         ###   ########.fr        #
+#    Updated: 2023/01/23 11:03:29 by baltes-g         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -87,6 +87,7 @@ all:	$(NAME)
 $(NAME): $(OBJS) $(INC)
 	@echo "Creant $@"
 	@$(LIB) $(NAME) $(OBJS)
+	cp libft.a ..
 
 clean:
 		${RM} ${OBJS}

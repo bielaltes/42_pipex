@@ -6,7 +6,7 @@
 /*   By: baltes-g <baltes-g@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 16:54:52 by baltes-g          #+#    #+#             */
-/*   Updated: 2022/12/22 20:39:49 by baltes-g         ###   ########.fr       */
+/*   Updated: 2023/01/23 12:00:25 by baltes-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ int main(int argc, char **argv, char **envp)
 	int fd_file1;
 	int fd_file2;
 	char **args;
+	int status;
 
 	if (argc != 5)
 		error("input");
@@ -69,6 +70,7 @@ int main(int argc, char **argv, char **envp)
 		close(p[0]);
 		args = ft_split(argv[2], ' ');
 		execve(get_path(envp, args[0]), args, envp);
+		exit(2);
 	}
 	int chl2 = fork();
 	if (chl2 == 0)
@@ -81,9 +83,11 @@ int main(int argc, char **argv, char **envp)
 		close(p[0]);
 		args = ft_split(argv[3], ' ');
 		execve(get_path(envp, args[0]), args, envp);
+		exit(2);
 	}
 	close(p[0]);
 	close(p[1]);
-	waitpid(chl1, NULL, 0);
-	waitpid(chl2, NULL, 0);
+	waitpid(chl1, &status, 0);
+	waitpid(chl2, &status, 0);
+	return (WEXITSTATUS(status));
 }
