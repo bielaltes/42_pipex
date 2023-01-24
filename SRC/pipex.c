@@ -6,7 +6,7 @@
 /*   By: baltes-g <baltes-g@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 16:54:52 by baltes-g          #+#    #+#             */
-/*   Updated: 2023/01/23 12:00:25 by baltes-g         ###   ########.fr       */
+/*   Updated: 2023/01/24 12:23:09 by baltes-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,22 @@ void cmd_not_found(char *str)
 {
 	write(2, str, ft_strlen(str));
 	write(2, ": command not found\n", 21);
-	exit(EXIT_FAILURE);
+	exit(127);
 }
 
 char *get_path(char **envp, char *exe)
 {
 	char **paths;
 	
-	while (envp && ft_strncmp(*envp, "PATH=", 4))
+	while (envp && *envp && ft_strncmp(*envp, "PATH=", 4))
 		++envp;
-	paths = ft_split(*envp + 5, ':');
+	if (!envp || !(*envp))
+		paths = ft_split("/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:.", ':');
+	else
+	{
+		*envp = ft_strjoin(*envp, ".");
+		paths = ft_split(*envp + 5, ':');
+	}
 	while (paths && *paths)
 	{
 		char *tmp = ft_strjoin(*paths, "/");
