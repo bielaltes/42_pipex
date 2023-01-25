@@ -6,103 +6,111 @@
 /*   By: baltes-g <baltes-g@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/26 17:50:10 by baltes-g          #+#    #+#             */
-/*   Updated: 2023/01/24 12:15:07 by baltes-g         ###   ########.fr       */
+/*   Updated: 2023/01/25 13:23:40 by baltes-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static void check_escaped(char *s)
+static int	ft_isscaped(char *s)
 {
-	int i = 0;
-	int b1 = 1;
-	int b2 = 1;
+	int	count;
 
-	while(s[i] != '\0')
+	count = 0;
+	if (*(s - 1))
+		s--;
+	else
+		return (0);
+	while (*(s - count) && *(s - count) == 92)
+		count++;
+	if (count % 2)
+		return (*(s + 1));
+	return (0);
+}
+
+static int	ft_isquote(char *s, char quote)
+{
+	if (*s != quote)
+		return (0);
+	if (!ft_isscaped(s))
+		return (*s);
+	return (0);
+}
+
+static void ft_check_escaped(char *str)
+{
+	int i;
+
+	while(*str != '\0')
 	{
-		if (s[i] == 34)
-			b1 *= -1;
-		if (s[i] == 39)
-			b2 *= -1;
-		if (s[i] == 92)
+		if ((*str == 34 || *str ==39) && ft_isscaped(str))
 		{
-			ft_memmove(&s[i], &s[i+1], ft_strlen(&s[i+1]));
-			s[i+ft_strlen(&s[i+1])] = '\0';
+			i = 0;
+			while (str[i] != '\0')
+			{
+				str[i-1] = str[i];
+				++i;
+			}
+			str[i-1] = '\0';
 		}
-		++i;
+		++str;
 	}
 }
 
-static int	count_words(char const *s, char c)
+static int word_len(char *str, char c)
 {
-	int	sum;
-	int	in_word;
-	int i = 0;
-
-	sum = 0;
-	in_word = 0;
-	while (s[i] != '\0')
-	{
-		if (s[i] == 34 && (i == 0 || (i>0 && s[i-1] != '\\')))
-		{
-			++i;
-			while (s[i] != '\0' && s[i] != 34 && s[i-1] != '\\')
-				++i;
-		}
-		if (s[i] == 39 && (i == 0 || (i>0 && s[i-1] != '\\')))
-		{
-			++i;
-			while ( s[i] != '\0'&& s[i] != 39 && s[i-1] != '\\')
-				++i;
-		}
-		if (s[i] != c && in_word == 0)
-		{
-			++sum;
-			in_word = 1;
-			++i;
-		}
-		else if (s[i]== c && (i == 0 || (i>0 && s[i-1] != '\\')))
-		{
-			in_word = 0;
-			++i;
-		}
-		else
-			++i;
-	}
-	return (sum);
-}
-
-static int	word_len(char const *s, char c, int i)
-{
-	int	len;
+	int util;
+	int len;
 
 	len = 0;
-	while (s[i] != '\0' && s[i] != c && (i==0 || s[i-1] != '\\'))
+	util = ft_isquote(str, 34) | ft_isquote(str, 39);
+	if (util)
 	{
-		if (s[i] == 34 && (i == 0 || (s[i-1] != '\\')))
+		++str;
+		++len;
+		while (*str && !ft_isquote(str, util))
 		{
-			len++;
-			i++;
-			while (s[i] != 34 || s[i-1] == '\\')
-			{
-				len++;
-				i++;
-			}
+			++str;
+			++len;
 		}
-		if (s[i] == 39 && (i == 0 || (s[i-1] != '\\')))
+		if (*str == 34 || *str == 39)
+			len++;
+	}
+	else
+	{
+		str++;
+		++len;
+		while (*str && *str != c && !ft_isquote(str, 34)
+			&& !ft_isquote(str, 39))
 		{
-			len++;
-			i++;
-			while (s[i] != 39 || s[i-1] == '\\')
-			{
-				len++;
-				i++;
-			}
+			str++;
+			++len;
 		}
-		len++;
-		i++;
+		
 	}
 	return (len);
+}
+
+static int	count_words(char *s, char c)
+{
+	int	sum;
+	int aux;
+
+	sum = 0;
+	while (*s != '\0')
+	{
+		while (*s == c)
+			++s;
+		aux = word_len(s, c);
+		//write(2, s, aux);
+		s += aux;
+		char buff[10];
+		sprintf(buff, "\n%d\n", aux);
+		//write(2, buff, ft_strlen(buff));
+		sum++;
+	}
+	//write(2, "\n", 1);
+	return (sum);
 }
 
 static char	**malloc_error(char **new, int j)
@@ -121,37 +129,41 @@ char	**ft_split(char *s, char c)
 	int		i;
 	int		j;
 	char	**new;
+	int		words;
 
-	//check_escaped(s);
 	if (*s && *s == '.' && s[1] && s[1] == '/')
 	{
+		if (count_words(s, ' ') > 1)
+			return (NULL);
 		new = malloc(sizeof(char *) * 2);
 		if (!new)
 			return (NULL);
 		new[0] = ft_substr(s, 0, ft_strlen(s));
+		ft_check_escaped(new[0]);
+		write(2, new[0], ft_strlen(new[0]));
+		write(2, ";", 1);
 		new[1] = NULL;
 		return (new);
 	}
-	//write(2, s, ft_strlen(s));
-	//write(2, "\n", 1);
-	new = malloc(sizeof(char *) * (count_words(s, c) + 1));
+	words = count_words(s, c);
+	new = malloc(sizeof(char *) * (words + 1));
 	if (!new)
 		return (NULL);
 	i = 0;
 	j = 0;
-	while (j < count_words(s, c))
+	while (j < words)
 	{
 		while (s[i] == c)
 			i++;
-		new[j] = ft_substr(s, i, word_len(s, c, i));
-		check_escaped(new[j]);
+		new[j] = ft_substr(s, i, word_len(&s[i], c));
 		if (new[j][0] == 34 || new[j][0] == 39)
 			new[j] = ft_substr(new[j], 1, ft_strlen(new[j])-2);
+		ft_check_escaped(new[j]);
 		//write(2, new[j], ft_strlen(new[j]));
 		//write(2, ";", 1);
 		if (!new[j])
 			return (malloc_error(new, j));
-		i += word_len(s, c, i);
+		i += word_len(&s[i], c);
 		++j;
 	}
 	new[j] = (NULL);

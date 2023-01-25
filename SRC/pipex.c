@@ -6,7 +6,7 @@
 /*   By: baltes-g <baltes-g@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 16:54:52 by baltes-g          #+#    #+#             */
-/*   Updated: 2023/01/24 12:23:09 by baltes-g         ###   ########.fr       */
+/*   Updated: 2023/01/25 14:46:20 by baltes-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,15 +35,18 @@ char *get_path(char **envp, char *exe)
 		paths = ft_split("/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:.", ':');
 	else
 	{
-		*envp = ft_strjoin(*envp, ".");
+		if (ft_strchr(exe, '/'))
+				*envp = ft_strjoin(*envp, ":.");
 		paths = ft_split(*envp + 5, ':');
 	}
 	while (paths && *paths)
 	{
 		char *tmp = ft_strjoin(*paths, "/");
 		char *path = ft_strjoin(tmp, exe);
+		if (ft_strchr(exe, '/') == exe)
+			path = exe;
 		free(tmp);
-		if (access(path, 0) == 0)
+		if (access(path, X_OK) == 0)
 			return path;
 		free(path);
 		paths++;
@@ -52,6 +55,25 @@ char *get_path(char **envp, char *exe)
 	cmd_not_found(error_msg);
 	return (NULL);
 }
+
+/*static void check_file(char *file, int mode)
+{
+	if (mode == R_OK)
+	{
+		if (access(file, F_OK))
+			exit(2);
+		else if (access(file, mode))
+			exit(2);
+	}
+	else
+	{
+		if (!access(file, F_OK))
+		{
+			if (access(file, mode))
+				exit(2);
+		}
+	}
+}*/
 
 int main(int argc, char **argv, char **envp)
 {
@@ -70,6 +92,7 @@ int main(int argc, char **argv, char **envp)
 	{
 		fd_file1 = open(argv[1], O_RDONLY);
 		if (fd_file1 == -1) error("pipex: input");
+		//check_file(argv[1], R_OK);
 		dup2(fd_file1,0);
 		dup2(p[1], 1);
 		close(p[1]);
@@ -81,6 +104,7 @@ int main(int argc, char **argv, char **envp)
 	int chl2 = fork();
 	if (chl2 == 0)
 	{
+		//check_file(argv[1], W_OK);
 		fd_file2 = open(argv[4], O_TRUNC | O_CREAT | O_RDWR, 0000644);
 		if (fd_file2 == -1) error("pipex: output");
 		dup2(fd_file2,1);
