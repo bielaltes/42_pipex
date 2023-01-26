@@ -6,7 +6,7 @@
 /*   By: baltes-g <baltes-g@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 17:45:12 by baltes-g          #+#    #+#             */
-/*   Updated: 2023/01/23 13:04:33 by baltes-g         ###   ########.fr       */
+/*   Updated: 2023/01/26 10:28:15 by baltes-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ int				ft_isalpha(int c);
 int				ft_isascii(int c);
 int				ft_isdigit(int c);
 int				ft_isprint(int c);
+int				ft_isspace(char c);
 void			*ft_memchr(const void *s, int c, size_t n);
 void			*ft_memcpy(void *dst, const void *src, size_t n);
 void			*ft_memmove(void *dst, const void *src, size_t len);
@@ -96,12 +97,14 @@ char			*ft_strchr_gnl(char *s, int c);
 char			*ft_strjoin_gnl(char *s1, char *s2);
 char			*ft_strrchr_gnl(const char *s, int c);
 size_t			ft_strlen_gnl(const char *str);
-int				ft_htoa_printf(t_flags flags, unsigned int c, int *error, int maj);
+int				ft_htoa_printf(t_flags flags, unsigned int c, int *error,
+					int maj);
 int				ft_itoa_printf(t_flags flags, int c, int *error);
 int				ft_printchar_printf(t_flags flags, int c, int *error);
 int				ft_printf(char const *str, ...);
 int				ft_printstr_printf(t_flags flags, char *str, int *error);
-int				ft_ptoa_printf(t_flags flags, unsigned long long int c, int *error);
+int				ft_ptoa_printf(t_flags flags, unsigned long int c,
+					int *error);
 int				ft_uitoa_printf(t_flags flags, unsigned int c, int *error);
 
 #endif

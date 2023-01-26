@@ -6,7 +6,7 @@
 /*   By: baltes-g <baltes-g@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 17:45:12 by baltes-g          #+#    #+#             */
-/*   Updated: 2023/01/25 09:49:13 by baltes-g         ###   ########.fr       */
+/*   Updated: 2023/01/26 10:28:15 by baltes-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,12 +97,14 @@ char			*ft_strchr_gnl(char *s, int c);
 char			*ft_strjoin_gnl(char *s1, char *s2);
 char			*ft_strrchr_gnl(const char *s, int c);
 size_t			ft_strlen_gnl(const char *str);
-int				ft_htoa_printf(t_flags flags, unsigned int c, int *error, int maj);
+int				ft_htoa_printf(t_flags flags, unsigned int c, int *error,
+					int maj);
 int				ft_itoa_printf(t_flags flags, int c, int *error);
 int				ft_printchar_printf(t_flags flags, int c, int *error);
 int				ft_printf(char const *str, ...);
 int				ft_printstr_printf(t_flags flags, char *str, int *error);
-int				ft_ptoa_printf(t_flags flags, unsigned long long int c, int *error);
+int				ft_ptoa_printf(t_flags flags, unsigned long int c,
+					int *error);
 int				ft_uitoa_printf(t_flags flags, unsigned int c, int *error);
 
 #endif

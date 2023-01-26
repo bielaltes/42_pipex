@@ -6,7 +6,7 @@
 /*   By: baltes-g <baltes-g@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/05 12:50:48 by baltes-g          #+#    #+#             */
-/*   Updated: 2022/12/14 16:14:41 by baltes-g         ###   ########.fr       */
+/*   Updated: 2023/01/26 10:29:44 by baltes-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static void	ft_putnbr(t_flags *flags,
 	}
 }
 
-int	ft_ptoa_printf(t_flags flags, unsigned long long int c, int *error)
+int	ft_ptoa_printf(t_flags flags, unsigned long int c, int *error)
 {
 	flags.aux = 0;
 	flags.aux += ft_printstr_printf(flags, "0x", error);

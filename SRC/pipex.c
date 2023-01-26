@@ -6,11 +6,12 @@
 /*   By: baltes-g <baltes-g@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 16:54:52 by baltes-g          #+#    #+#             */
-/*   Updated: 2023/01/25 14:46:20 by baltes-g         ###   ########.fr       */
+/*   Updated: 2023/01/26 12:36:36 by baltes-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../pipex.h"
+#include "../libft.h"
 
 void error(char *str)
 {
@@ -48,6 +49,8 @@ char *get_path(char **envp, char *exe)
 		free(tmp);
 		if (access(path, X_OK) == 0)
 			return path;
+		else if(access(path, F_OK) == 0)
+			exit (126);
 		free(path);
 		paths++;
 	}
@@ -56,24 +59,24 @@ char *get_path(char **envp, char *exe)
 	return (NULL);
 }
 
-/*static void check_file(char *file, int mode)
+static void check_file(char *file, int mode)
 {
 	if (mode == R_OK)
 	{
 		if (access(file, F_OK))
 			exit(2);
 		else if (access(file, mode))
-			exit(2);
+			exit(1);
 	}
 	else
 	{
 		if (!access(file, F_OK))
 		{
 			if (access(file, mode))
-				exit(2);
+				exit(1);
 		}
 	}
-}*/
+}
 
 int main(int argc, char **argv, char **envp)
 {
@@ -104,8 +107,9 @@ int main(int argc, char **argv, char **envp)
 	int chl2 = fork();
 	if (chl2 == 0)
 	{
-		//check_file(argv[1], W_OK);
+		
 		fd_file2 = open(argv[4], O_TRUNC | O_CREAT | O_RDWR, 0000644);
+		check_file(argv[4], W_OK);
 		if (fd_file2 == -1) error("pipex: output");
 		dup2(fd_file2,1);
 		dup2(p[0], 0);

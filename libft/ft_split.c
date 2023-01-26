@@ -6,7 +6,7 @@
 /*   By: baltes-g <baltes-g@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/26 17:50:10 by baltes-g          #+#    #+#             */
-/*   Updated: 2023/01/25 13:23:40 by baltes-g         ###   ########.fr       */
+/*   Updated: 2023/01/26 11:35:45 by baltes-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,56 +37,47 @@ static int	ft_isquote(char *s, char quote)
 	return (0);
 }
 
-static void ft_check_escaped(char *str)
+static void	ft_check_escaped(char *str)
 {
-	int i;
+	int	i;
 
-	while(*str != '\0')
+	while (*str != '\0')
 	{
-		if ((*str == 34 || *str ==39) && ft_isscaped(str))
+		if ((*str == 34 || *str == 39) && ft_isscaped(str))
 		{
 			i = 0;
 			while (str[i] != '\0')
 			{
-				str[i-1] = str[i];
+				str[i - 1] = str[i];
 				++i;
 			}
-			str[i-1] = '\0';
+			str[i - 1] = '\0';
 		}
 		++str;
 	}
 }
 
-static int word_len(char *str, char c)
+static int	word_len(char *str, char c)
 {
-	int util;
-	int len;
+	int	util;
+	int	len;
 
 	len = 0;
 	util = ft_isquote(str, 34) | ft_isquote(str, 39);
 	if (util)
 	{
-		++str;
 		++len;
-		while (*str && !ft_isquote(str, util))
-		{
-			++str;
+		while (*++str && !ft_isquote(str, util))
 			++len;
-		}
 		if (*str == 34 || *str == 39)
 			len++;
 	}
 	else
 	{
-		str++;
 		++len;
-		while (*str && *str != c && !ft_isquote(str, 34)
+		while (*++str && *str != c && !ft_isquote(str, 34)
 			&& !ft_isquote(str, 39))
-		{
-			str++;
 			++len;
-		}
-		
 	}
 	return (len);
 }
@@ -94,7 +85,7 @@ static int word_len(char *str, char c)
 static int	count_words(char *s, char c)
 {
 	int	sum;
-	int aux;
+	int	aux;
 
 	sum = 0;
 	while (*s != '\0')
@@ -102,14 +93,9 @@ static int	count_words(char *s, char c)
 		while (*s == c)
 			++s;
 		aux = word_len(s, c);
-		//write(2, s, aux);
 		s += aux;
-		char buff[10];
-		sprintf(buff, "\n%d\n", aux);
-		//write(2, buff, ft_strlen(buff));
 		sum++;
 	}
-	//write(2, "\n", 1);
 	return (sum);
 }
 
@@ -124,6 +110,21 @@ static char	**malloc_error(char **new, int j)
 	return (NULL);
 }
 
+static char	**ft_split_exe(char *s)
+{
+	char	**new;
+
+	if (count_words(s, ' ') > 1)
+		return (NULL);
+	new = malloc(sizeof(char *) * 2);
+	if (!new)
+		return (NULL);
+	new[0] = ft_substr(s, 0, ft_strlen(s));
+	ft_check_escaped(new[0]);
+	new[1] = NULL;
+	return (new);
+}
+
 char	**ft_split(char *s, char c)
 {
 	int		i;
@@ -132,19 +133,7 @@ char	**ft_split(char *s, char c)
 	int		words;
 
 	if (*s && *s == '.' && s[1] && s[1] == '/')
-	{
-		if (count_words(s, ' ') > 1)
-			return (NULL);
-		new = malloc(sizeof(char *) * 2);
-		if (!new)
-			return (NULL);
-		new[0] = ft_substr(s, 0, ft_strlen(s));
-		ft_check_escaped(new[0]);
-		write(2, new[0], ft_strlen(new[0]));
-		write(2, ";", 1);
-		new[1] = NULL;
-		return (new);
-	}
+		return (ft_split_exe(s));
 	words = count_words(s, c);
 	new = malloc(sizeof(char *) * (words + 1));
 	if (!new)
@@ -157,10 +146,8 @@ char	**ft_split(char *s, char c)
 			i++;
 		new[j] = ft_substr(s, i, word_len(&s[i], c));
 		if (new[j][0] == 34 || new[j][0] == 39)
-			new[j] = ft_substr(new[j], 1, ft_strlen(new[j])-2);
+			new[j] = ft_substr(new[j], 1, ft_strlen(new[j]) - 2);
 		ft_check_escaped(new[j]);
-		//write(2, new[j], ft_strlen(new[j]));
-		//write(2, ";", 1);
 		if (!new[j])
 			return (malloc_error(new, j));
 		i += word_len(&s[i], c);

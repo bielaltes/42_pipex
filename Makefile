@@ -15,13 +15,12 @@ OBJ_BNS=$(SRC_BNS:.c=.o)
 
 all: $(NAME)
 
-
 $(LIB):	
 	@$(MAKE) -C $(LIB_DIR)
 	/bin/mv $(LIB_DIR)$(LIB) .
 	/bin/cp $(LIB_DIR)libft.h .
 
-$(NAME): $(LIB) $(OBJ) 
+$(NAME): $(OBJ) $(LIB) 
 	@echo "Compilant $@"
 	@$(CC) $(CFLAGS) $(OBJ) -I $(INC) $< -o $(NAME)
 

@@ -6,7 +6,7 @@
 /*   By: baltes-g <baltes-g@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/29 15:14:22 by baltes-g          #+#    #+#             */
-/*   Updated: 2022/12/14 16:06:32 by baltes-g         ###   ########.fr       */
+/*   Updated: 2023/01/26 10:25:43 by baltes-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static int	ft_parse_type(char const *str, va_list args, int *i, int *error)
 	else if (str[aux] == 's')
 		return (ft_printstr_printf(flags, va_arg(args, char *), error));
 	else if (str[aux] == 'p')
-		return (ft_ptoa_printf(flags, va_arg(args, unsigned long long int), error));
+		return (ft_ptoa_printf(flags, va_arg(args, unsigned long int), error));
 	else if (str[aux] == 'd')
 		return (ft_itoa_printf(flags, va_arg(args, int), error));
 	else if (str[aux] == 'i')
