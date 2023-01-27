@@ -6,7 +6,7 @@
 #    By: baltes-g <baltes-g@student.42barcelona.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/16 17:10:25 by baltes-g          #+#    #+#              #
-#    Updated: 2023/01/27 11:32:30 by baltes-g         ###   ########.fr        #
+#    Updated: 2023/01/27 13:31:55 by baltes-g         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -61,7 +61,7 @@ SRCS =	ft_bzero.c					\
 		ft_printstr_printf.c		\
 		ft_uitoa_printf.c			\
 		ft_printchar_printf.c		\
-		get_next_line_bonus.c	\
+		get_next_line_bonus.c		\
 		get_next_line_utils_bonus.c	
 
 
@@ -81,7 +81,7 @@ CFLAGS	=	-Wall -Wextra -Werror
 
 all:	$(NAME)
  
-%.o:%.c
+%.o:%.c $(INC)
 	@echo "Compilant $@" 
 	@$(CC) $(CFLAGS) -I $(INC) -c $< -o $@
 
