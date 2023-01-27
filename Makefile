@@ -3,9 +3,10 @@ NAME=pipex
 CFLAGS=-Wall -Wextra -Werror
 LIB_DIR=libft/
 LIB=libft.a
-INC = pipex.h
+LIB_INC=libft.h
+INC = INC/pipex.h
 
-SRC =	SRC/pipex.c		
+SRC =	SRC/pipex.c		SRC/pipex_utils.c
 
 SRC_BNS =
 
@@ -13,17 +14,17 @@ OBJ=$(SRC:.c=.o)
 
 OBJ_BNS=$(SRC_BNS:.c=.o)
 
-all: $(NAME)
-
-
-$(LIB):	
+all:
 	@$(MAKE) -C $(LIB_DIR)
-	/bin/mv $(LIB_DIR)$(LIB) .
-	/bin/cp $(LIB_DIR)libft.h .
+	@$(MAKE) $(NAME)
 
-$(NAME): $(LIB) $(OBJ) 
+%.o: %.c $(INC) 
 	@echo "Compilant $@"
-	@$(CC) $(CFLAGS) $(OBJ) -I $(INC) $< -o $(NAME)
+	@$(CC) $(CFLAGS) -c $< -o $@
+
+$(NAME): $(LIB_DIR)$(LIB) $(OBJ) 
+	@echo "Enllaçant $@"
+	@$(CC) $(CFLAGS) $(LIB_DIR)$(LIB) $(OBJ) $< -o $(NAME)
 
 clean:
 	rm -f $(OBJ) $(OBJ_BNS)

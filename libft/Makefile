@@ -6,7 +6,7 @@
 #    By: baltes-g <baltes-g@student.42barcelona.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/16 17:10:25 by baltes-g          #+#    #+#              #
-#    Updated: 2023/01/26 20:09:08 by baltes-g         ###   ########.fr        #
+#    Updated: 2023/01/27 11:32:30 by baltes-g         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,6 +43,7 @@ SRCS =	ft_bzero.c					\
 		ft_putstr_fd.c				\
 		ft_putendl_fd.c				\
 		ft_putnbr_fd.c				\
+		ft_split_utils.c			\
 		ft_split.c					\
 		ft_lstnew.c					\
 		ft_lstadd_front.c			\

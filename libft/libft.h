@@ -6,7 +6,7 @@
 /*   By: baltes-g <baltes-g@student.42barcelona.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 17:45:12 by baltes-g          #+#    #+#             */
-/*   Updated: 2023/01/26 10:28:15 by baltes-g         ###   ########.fr       */
+/*   Updated: 2023/01/27 11:32:42 by baltes-g         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,5 +106,8 @@ int				ft_printstr_printf(t_flags flags, char *str, int *error);
 int				ft_ptoa_printf(t_flags flags, unsigned long int c,
 					int *error);
 int				ft_uitoa_printf(t_flags flags, unsigned int c, int *error);
+int				ft_isscaped(char *s);
+int				ft_isquote(char *s, char quote);
+void			ft_check_escaped(char *str);
 
 #endif
